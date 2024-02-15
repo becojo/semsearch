@@ -96,7 +96,6 @@ type State struct {
 	Paths     []string
 	Configs   []string
 	Format    string
-	Message   string
 	Debug     bool
 	Export    bool
 	Evals     []string
@@ -233,7 +232,7 @@ func (s *State) Build(args []string) {
 				FocusMetavariable: metavar(value),
 			})
 		case "message":
-			s.Message = value
+			s.Rule.Message = value
 		case "language":
 			s.Languages = append(s.Languages, value)
 		case "config":
