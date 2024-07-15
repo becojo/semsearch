@@ -11,7 +11,7 @@ import (
 var help string = `Usage: semsearch [options]
 
 Pattern options:
-
+  -l,   --language <language>              Add a language to the rule
   -p,   --pattern <pattern>                Pattern to search for
   -pi,  --pattern-inside <pattern>         Pattern to search for inside the matched pattern
   -pni, --pattern-not-inside <pattern>     Pattern to search for not inside the matched pattern
@@ -21,22 +21,26 @@ Pattern options:
   -fm,  --focus-metavariable <name>        Metavariable to focus on
 
 Pattern group options:
-  -ps,  --patterns                         Start a new pattern group
-  -pe,  --pattern-either <pattern>         Pattern to search for either the matched pattern or the given pattern
-  [                                        Start a pattern group
-  ],    --pop                              End the pattern group
+  -ps,  --patterns                          Start a pattern group where all patterns must match
+  -pe,  --pattern-either <pattern>          Start a pattern group where any pattern may match
+  ],    --pop                               Exit the current pattern group
 
 Search options:
-  -l,   --language <language>              Language to search for (default: generic)
-  -i,   --file, --path <path>              Evaluate the rule on the given path
-  --eval <string>                          Evaluate the rule on the given string
+  -i,   --path <path>                       Add the path to the search
+  -e,   --eval <string>                     Evaluate the rule on the given string
 
 Rule options:
-  -f,  --format <format>                   Output format (json, text, sarif, vim)
-  -c,  --config <config>                   Run additional rules
-  -m,  --message <message>                 Message to display
-  --id <id>                                Rule id
-  --export                                 Output the YAML rule
+  --id  <id>                                Rule ID
+  -f,   --format <format>                   Output format (json, text, sarif, vim)
+  -c,   --config <config>                   Add additional rules
+  -m,   --message <message>                 Message to display
+  -fx,  --fix <pattern>                     Fix pattern
+  -af,  --autofix                           Write fixes
+
+
+Other options:
+  --debug                                  Debug mode
+  --export                                 Output the rule instead of running Semgrep
 `
 
 var shortcuts = map[string]string{
@@ -55,6 +59,8 @@ var shortcuts = map[string]string{
 	"e":   "eval",
 	"i":   "file",
 	"m":   "message",
+	"fx":  "fix",
+	"af":  "autofix",
 }
 
 type Rule struct {
@@ -63,6 +69,7 @@ type Rule struct {
 	Severity  string         `yaml:"severity"`
 	Message   string         `yaml:"message"`
 	Languages []string       `yaml:"languages"`
+	Fix       string         `yaml:"fix,omitempty"`
 }
 
 type MetavariableRegex struct {
@@ -101,6 +108,7 @@ type State struct {
 	Evals     []string
 	Pairs     int
 	Tempfiles []string
+	Autofix   bool
 }
 
 func metavar(value string) string {
@@ -139,6 +147,10 @@ func (s *State) Args() []string {
 
 	if len(s.Evals) > 0 {
 		args = append(args, "--scan-unknown-extensions")
+	}
+
+	if s.Autofix {
+		args = append(args, "--autofix")
 	}
 
 	args = append(args, s.Paths...)
@@ -237,7 +249,7 @@ func (s *State) Build(args []string) {
 			s.Languages = append(s.Languages, value)
 		case "config":
 			s.Configs = append(s.Configs, value)
-		case "path", "file":
+		case "path":
 			s.Paths = append(s.Paths, value)
 		case "id":
 			s.Rule.Id = value
@@ -245,6 +257,10 @@ func (s *State) Build(args []string) {
 			s.Evals = append(s.Evals, value)
 		case "severity":
 			s.Severity = value
+		case "autofix":
+			s.Autofix = true
+		case "fix":
+			s.Fix = value
 		default:
 			fmt.Fprintf(os.Stderr, "Error: unknown cli option %s\n", cmd)
 			os.Exit(1)
