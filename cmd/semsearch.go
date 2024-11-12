@@ -2,10 +2,11 @@ package main
 
 import (
 	"fmt"
-	"gopkg.in/yaml.v2"
 	"os"
 	"os/exec"
 	"strings"
+
+	"gopkg.in/yaml.v2"
 )
 
 var help string = `Usage: semsearch [options]
@@ -57,7 +58,7 @@ var shortcuts = map[string]string{
 	"fm":  "focus-metavariable",
 	"c":   "config",
 	"e":   "eval",
-	"i":   "file",
+	"i":   "path",
 	"m":   "message",
 	"fx":  "fix",
 	"af":  "autofix",
