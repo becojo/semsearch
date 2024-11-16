@@ -12,14 +12,14 @@ import (
 var help string = `Usage: semsearch [options]
 
 Pattern options:
-  -l,   --language <language>              Add a language to the rule
-  -p,   --pattern <pattern>                Pattern to search for
-  -pi,  --pattern-inside <pattern>         Pattern to search for inside the matched pattern
-  -pni, --pattern-not-inside <pattern>     Pattern to search for not inside the matched pattern
-  -pr,  --pattern-regex <pattern>          Pattern to search for using a regex
-  -pnr, --pattern-not-regex <pattern>      Pattern to search for not using a regex
-  -mr,  --metavariable-regex <name=regex>  Metavariable to search for using a regex
-  -fm,  --focus-metavariable <name>        Metavariable to focus on
+  -l,   --language <language>               Add a language to the rule
+  -p,   --pattern <pattern>                 Pattern to search for
+  -pi,  --pattern-inside <pattern>          Pattern to search for inside the matched pattern
+  -pni, --pattern-not-inside <pattern>      Pattern to search for not inside the matched pattern
+  -pr,  --pattern-regex <pattern>           Pattern to search for using a regex
+  -pnr, --pattern-not-regex <pattern>       Pattern to search for not using a regex
+  -mr,  --metavariable-regex <name=regex>   Metavariable to search for using a regex
+  -fm,  --focus-metavariable <name>         Metavariable to focus on
 
 Pattern group options:
   -ps,  --patterns                          Start a pattern group where all patterns must match
@@ -40,8 +40,8 @@ Rule options:
 
 
 Other options:
-  --debug                                  Debug mode
-  --export                                 Output the rule instead of running Semgrep
+  --debug                                   Debug mode
+  --export                                  Output the rule instead of running Semgrep
 `
 
 var shortcuts = map[string]string{
