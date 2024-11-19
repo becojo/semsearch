@@ -305,11 +305,10 @@ func (s *State) Prepare() {
 	}
 }
 
-func (s *State) Exec() {
+func (s *State) Exec() error {
 	rulefile, err := s.Tempfile("semsearch-rule-")
 	if err != nil {
-		fmt.Fprintln(os.Stderr, "Error: failed to create temporary rule file")
-		return
+		return err
 	}
 
 	s.Configs = append(s.Configs, rulefile.Name())
@@ -329,13 +328,13 @@ func (s *State) Exec() {
 
 	if s.Export {
 		yaml.NewEncoder(os.Stdout).Encode(rules)
-		return
+		return nil
 	}
 
 	cmd := exec.Command("semgrep", args...)
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
-	cmd.Run()
+	return cmd.Run()
 }
 
 func main() {
@@ -349,5 +348,9 @@ func main() {
 
 	state.Build(os.Args[1:])
 	state.Prepare()
-	state.Exec()
+	err := state.Exec()
+	if err != nil {
+		fmt.Fprintln(os.Stderr, err)
+		os.Exit(1)
+	}
 }
