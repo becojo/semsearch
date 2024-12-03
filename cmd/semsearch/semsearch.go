@@ -93,9 +93,8 @@ type Condition struct {
 	FocusMetavariable string            `yaml:"focus-metavariable,omitempty"`
 	MetavariableRegex MetavariableRegex `yaml:"metavariable-regex,omitempty"`
 
-	Patterns            *[]interface{}      `yaml:"patterns,omitempty"`
-	PatternEither       *[]interface{}      `yaml:"pattern-either,omitempty"`
-	MetavariablePattern MetavariablePattern `yaml:"metavariable-pattern,omitempty"`
+	Patterns      *[]interface{} `yaml:"patterns,omitempty"`
+	PatternEither *[]interface{} `yaml:"pattern-either,omitempty"`
 }
 
 type State struct {
