@@ -77,3 +77,11 @@ rules:
   - go
 ```
 
+
+## Installation
+
+Download the [latest release](https://github.com/becojo/semsearch/releases) or install with `go install`:
+
+```sh
+go install github.com/becojo/semsearch/cmd/semsearch@latest
+```
