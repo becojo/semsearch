@@ -2,7 +2,6 @@
 
 CLI interface to create and run Semgrep rules that are more complex that what the Semgrep CLI can handle.
 
-
 ```
 Usage: semsearch [options]
 
@@ -44,40 +43,30 @@ Other options:
 
 ### Search functions related to `*State`
 ``` sh
-semsearch -l go -fm F -pe -p 'func ($S *State) $F(...) {...}'  -p 'func $F(...) *State {...}'
+semsearch -l go -mr 'F=(Build|Args)' -fm F -pe -p 'func ($S *State) $F(...) {...}'  -p 'func $F(...) *State {...}'
 ```
 
 ``` sh
     cmd/semsearch.go
     ❯❱ id
-          123┆ func NewState() *State {
-             ┆----------------------------------------
           135┆ func (s *State) Args() []string {
              ┆----------------------------------------
-          161┆ func (s *State) AddCondition(cond Condition) {
-             ┆----------------------------------------
           166┆ func (s *State) Build(args []string) {
-             ┆----------------------------------------
-          276┆ func (s *State) Tempfile(name string) (*os.File, error) {
-             ┆----------------------------------------
-          285┆ func (s *State) Cleanup() {
-             ┆----------------------------------------
-          291┆ func (s *State) Prepare() {
-             ┆----------------------------------------
-          308┆ func (s *State) Exec() {
 ```
-
 
 ### Output the Semgrep rule instead of running it
 
 ``` sh
-semsearch -l go -fm F -pe -p 'func ($S *State) $F(...) {...}'  -p 'func $F(...) *State {...}' --export
+semsearch -l go -mr 'F=(Build|Args)' -fm F -pe -p 'func ($S *State) $F(...) {...}'  -p 'func $F(...) *State {...}' --export
 ```
 
 ``` yaml
 rules:
 - id: id
   patterns:
+  - metavariable-regex:
+      metavariable: $F
+      regex: (Build|Args)
   - focus-metavariable: $F
   - pattern-either:
     - pattern: func ($S *State) $F(...) {...}
