@@ -1,6 +1,6 @@
 # semsearch
 
-CLI interface to create and run Semgrep rules that are more complex that what the Semgrep CLI can handle.
+CLI interface to create and run Opengrep rules that are more complex that what the original Semgrep CLI can handle.
 
 ```
 Usage: semsearch [options]
@@ -35,7 +35,7 @@ Rule options:
 
 Other options:
   --debug                                   Debug mode
-  --export                                  Output the rule instead of running Semgrep
+  --export                                  Output the rule instead of running Opengrep
 ```
 
 ## Examples

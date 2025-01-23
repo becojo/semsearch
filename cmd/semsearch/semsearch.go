@@ -41,7 +41,7 @@ Rule options:
 
 Other options:
   --debug                                   Debug mode
-  --export                                  Output the rule instead of running Semgrep
+  --export                                  Output the rule instead of running Opengrep
 `
 
 var shortcuts = map[string]string{
@@ -109,6 +109,8 @@ type State struct {
 	Pairs     int
 	Tempfiles []string
 	Autofix   bool
+
+	Binary string
 }
 
 func metavar(value string) string {
@@ -128,6 +130,7 @@ func NewState() *State {
 	},
 		Format: "text",
 		Stack:  []*[]interface{}{&patterns},
+		Binary: "opengrep",
 	}
 }
 
@@ -322,7 +325,7 @@ func (s *State) Exec() error {
 
 	if s.Debug {
 		yaml.NewEncoder(os.Stderr).Encode(rules)
-		fmt.Fprintf(os.Stderr, "command: semgrep %s\n", strings.Join(args, " "))
+		fmt.Fprintf(os.Stderr, "command: %s %s\n", s.Binary, strings.Join(args, " "))
 	}
 
 	if s.Export {
@@ -330,7 +333,7 @@ func (s *State) Exec() error {
 		return nil
 	}
 
-	cmd := exec.Command("semgrep", args...)
+	cmd := exec.Command(s.Binary, args...)
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 	return cmd.Run()
