@@ -1,10 +1,8 @@
-# semsearch
+package cli
 
-CLI interface to create and run Opengrep rules that are more complex that what the original Semgrep CLI can handle.
+import "strings"
 
-<!-- help start -->
-```
-Usage: semsearch [options]
+var help string = `Usage: semsearch [options]
 
 Pattern options:
   -l,   --language <language>               Add a language to the rule
@@ -46,53 +44,8 @@ Run options:
   --debug                                   Output semsearch debug information
   --verbose                                 Enable Opengrep verbose mode
   --export                                  Output the rule instead of running Opengrep
-```
-<!-- help end -->
+`
 
-## Examples
-
-
-### Search functions related to `*State`
-``` sh
-semsearch -l go -mr 'F=(Build|Args)' -fm F -pe -p 'func ($S *State) $F(...) {...}'  -p 'func $F(...) *State {...}'
-```
-
-``` sh
-    cmd/semsearch.go
-    ❯❱ id
-          135┆ func (s *State) Args() []string {
-             ┆----------------------------------------
-          166┆ func (s *State) Build(args []string) {
-```
-
-### Output the Semgrep rule instead of running it
-
-``` sh
-semsearch -l go -mr 'F=(Build|Args)' -fm F -pe -p 'func ($S *State) $F(...) {...}'  -p 'func $F(...) *State {...}' --export
-```
-
-``` yaml
-rules:
-- id: rule-1
-  severity: WARNING
-  message: rule-1
-  languages:
-  - go
-  patterns:
-  - metavariable-regex:
-      metavariable: $F
-      regex: (Build|Args)
-  - focus-metavariable: $F
-  - pattern-either:
-    - pattern: func ($S *State) $F(...) {...}
-    - pattern: func $F(...) *State {...}
-```
-
-
-## Installation
-
-Download the [latest release](https://github.com/becojo/semsearch/releases) or install with `go install`:
-
-```sh
-go install github.com/becojo/semsearch/cmd/semsearch@latest
-```
+func Help() string {
+	return strings.TrimSpace(help)
+}
