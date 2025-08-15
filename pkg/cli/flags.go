@@ -22,6 +22,7 @@ var shortcuts = map[string]string{
 	"p":   "pattern",
 	"pe":  "pattern-either",
 	"pi":  "pattern-inside",
+	"pn":  "pattern-not",
 	"pni": "pattern-not-inside",
 	"pnr": "pattern-not-regex",
 	"pr":  "pattern-regex",
