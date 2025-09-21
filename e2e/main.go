@@ -21,12 +21,11 @@ const (
 )
 
 func (m *E2E) FromSource(
-	//+ignore=["*", "!pkg/**/*.go", "!cmd/**/*.go", "**_test.go", "!go.mod", "!go.sum"]
+	//+ignore=["*", "!pkg/**", "!cmd/**", "**_test.go", "!go.mod", "!go.sum"]
 	src *dagger.Directory,
 ) *WithSemsearch {
-	ctr := m.Semsearch(src, GoVersion)
 	return &WithSemsearch{
-		ctr.File("/usr/bin/semsearch"),
+		m.buildSemsearch(src, GoVersion),
 	}
 }
 
@@ -36,16 +35,10 @@ func (m *E2E) FromBinary(
 	return &WithSemsearch{file}
 }
 
-func (m *E2E) Semsearch(
-	//+ignore=["*", "!pkg/**/*.go", "!cmd/**/*.go", "**_test.go", "!go.mod", "!go.sum"]
+func (m *E2E) buildSemsearch(
 	src *dagger.Directory,
-	//+default=""
 	goVersion string,
-) *dagger.Container {
-	if goVersion == "" {
-		goVersion = GoVersion
-	}
-
+) *dagger.File {
 	goCache := dag.CacheVolume("go_cache" + goVersion)
 	buildCache := dag.CacheVolume("go_build" + goVersion)
 	ctr := dag.Container().
@@ -57,7 +50,7 @@ func (m *E2E) Semsearch(
 		WithWorkdir("/src").
 		WithExec([]string{"go", "build", "-o", "/usr/bin/semsearch", "./cmd/semsearch"})
 
-	return ctr
+	return ctr.File("/usr/bin/semsearch")
 }
 
 func (m *WithSemsearch) Semgrep(
@@ -68,11 +61,13 @@ func (m *WithSemsearch) Semgrep(
 	if version == "" {
 		version = SemgrepVersion
 	}
+
 	return dag.Container().
 		From(fmt.Sprintf("semgrep/semgrep:%s", version)).
 		WithEnvVariable("SEMGREP_SEND_METRICS", "off").
 		WithFile("/usr/bin/semsearch", m.Semsearch).
-		WithEnvVariable("SEMSEARCH_COMMAND", "semgrep")
+		WithEnvVariable("SEMSEARCH_COMMAND", "semgrep").
+		With(bashCompletion)
 }
 
 func (m *WithSemsearch) Opengrep(
@@ -86,12 +81,19 @@ func (m *WithSemsearch) Opengrep(
 
 	return dag.Container().
 		From("alpine:latest").
-		WithExec(append([]string{"apk", "add", "--no-cache", "curl", "cosign"})).
+		WithExec(append([]string{"apk", "add", "--no-cache", "bash", "curl", "cosign"})).
 		WithEnvVariable("OPENGREP_INSTALL_SCRIPT_URL", OpengrepInstallScript).
 		WithExec([]string{"sh", "-ec", `
 			curl -sSL "$OPENGREP_INSTALL_SCRIPT_URL" > "/usr/bin/opengrep-install.sh"
 		`}).
 		WithExec([]string{"sh", "/usr/bin/opengrep-install.sh", "-v", "v" + version}).
 		WithSymlink("/root/.opengrep/cli/latest/opengrep", "/usr/local/bin/opengrep").
-		WithFile("/usr/bin/semsearch", m.Semsearch)
+		WithFile("/usr/bin/semsearch", m.Semsearch).
+		With(bashCompletion)
+}
+
+func bashCompletion(ctr *dagger.Container) *dagger.Container {
+	return ctr.WithExec([]string{"sh", "-c", `
+		echo "source <(semsearch --bash-completion)" >> ~/.bashrc
+	`}).WithDefaultTerminalCmd([]string{"bash"})
 }
