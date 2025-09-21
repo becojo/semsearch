@@ -24,6 +24,7 @@ type Rule struct {
 	Message   string         `yaml:"message,omitempty"`
 	Languages []string       `yaml:"languages"`
 	Fix       string         `yaml:"fix,omitempty"`
+	FixRegex  string         `yaml:"fix-regex,omitempty"`
 	Options   map[string]any `yaml:"options,omitempty"`
 	Metadata  map[string]any `yaml:"metadata,omitempty"`
 	Paths     *RulePaths     `yaml:"paths,omitempty"`
@@ -67,7 +68,12 @@ func (r Rule) MarshalYAML() (any, error) {
 		items = append(items, yaml.MapItem{Key: "patterns", Value: r.Patterns})
 	}
 
-	if r.Fix != "" {
+	if r.FixRegex != "" {
+		items = append(items, yaml.MapItem{Key: "fix-regex", Value: []yaml.MapItem{
+			{Key: "regex", Value: r.FixRegex},
+			{Key: "replacement", Value: r.Fix},
+		}})
+	} else if r.Fix != "" {
 		items = append(items, yaml.MapItem{Key: "fix", Value: r.Fix})
 	}
 

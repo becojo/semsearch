@@ -17,12 +17,12 @@ func Parse(args []string) (*rule.State, error) {
 			return nil, fmt.Errorf("invalid command: %s", args[i])
 		}
 
-		if f, ok := commands[cmd]; ok {
+		if f, ok := flags0[cmd]; ok {
 			f(state)
 			continue
 		}
 
-		f, ok := functions[cmd]
+		f, ok := flags1[cmd]
 		if !ok {
 			return nil, fmt.Errorf("unknown command %s", cmd)
 		}

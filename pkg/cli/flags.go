@@ -13,6 +13,7 @@ var shortcuts = map[string]string{
 	"e":   "eval",
 	"f":   "format",
 	"fm":  "focus-metavariable",
+	"fr":  "fix-regex",
 	"fx":  "fix",
 	"i":   "path",
 	"l":   "language",
@@ -33,7 +34,8 @@ var shortcuts = map[string]string{
 	// keep-sorted end
 }
 
-var commands = map[string]func(*rule.State){
+// Flags not expecting a value
+var flags0 = map[string]func(*rule.State){
 	// keep-sorted start block=yes
 	"autofix":         func(s *rule.State) { s.Autofix() },
 	"debug":           func(s *rule.State) { s.Debug() },
@@ -49,11 +51,13 @@ var commands = map[string]func(*rule.State){
 	// keep-sorted end
 }
 
-var functions = map[string]func(*rule.State, string){
+// Flags expecting a value
+var flags1 = map[string]func(*rule.State, string){
 	// keep-sorted start block=yes
 	"config":               func(s *rule.State, v string) { s.Config(v) },
 	"eval":                 func(s *rule.State, v string) { s.Eval(v) },
 	"fix":                  func(s *rule.State, v string) { s.Fix(v) },
+	"fix-regex":            func(s *rule.State, v string) { s.FixRegex(v) },
 	"focus-metavariable":   func(s *rule.State, v string) { s.FocusMetavariable(v) },
 	"format":               func(s *rule.State, v string) { s.Format(v) },
 	"id":                   func(s *rule.State, v string) { s.Id(v) },
@@ -78,10 +82,10 @@ var functions = map[string]func(*rule.State, string){
 }
 
 func init() {
-	commands["^"] = commands["pop"]
+	flags0["^"] = flags0["pop"]
 
 	for format := range rule.Formats {
-		commands[format] = func(s *rule.State) { s.Format(format) }
+		flags0[format] = func(s *rule.State) { s.Format(format) }
 	}
 }
 

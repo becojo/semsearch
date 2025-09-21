@@ -271,6 +271,13 @@ func (s *State) Fix(fix string) *State {
 	return s
 }
 
+// Set the fix regex for the current rule
+func (s *State) FixRegex(fixRegex string) *State {
+	r := s.headRule()
+	r.FixRegex = fixRegex
+	return s
+}
+
 // Set the rule ID
 func (s *State) Id(id string) *State {
 	r := s.headRule()

@@ -7,10 +7,10 @@ import (
 var allCommands = map[string]bool{}
 
 func init() {
-	for cmd := range commands {
+	for cmd := range flags0 {
 		allCommands[cmd] = true
 	}
-	for cmd := range functions {
+	for cmd := range flags1 {
 		allCommands[cmd] = true
 	}
 }
