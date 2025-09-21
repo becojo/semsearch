@@ -110,6 +110,6 @@ type MetavariablePattern struct {
 }
 
 type RulePaths struct {
-	Exclude []string `yaml:"exclude,omitempty"`
 	Include []string `yaml:"include,omitempty"`
+	Exclude []string `yaml:"exclude,omitempty"`
 }

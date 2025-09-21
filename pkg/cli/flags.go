@@ -60,7 +60,7 @@ var flags1 = map[string]func(*rule.State, string){
 	"fix-regex":            func(s *rule.State, v string) { s.FixRegex(v) },
 	"focus-metavariable":   func(s *rule.State, v string) { s.FocusMetavariable(v) },
 	"format":               func(s *rule.State, v string) { s.Format(v) },
-	"id":                   func(s *rule.State, v string) { s.Id(v) },
+	"id":                   func(s *rule.State, v string) { s.ID(v) },
 	"language":             func(s *rule.State, v string) { s.Language(v) },
 	"message":              func(s *rule.State, v string) { s.Message(v) },
 	"metadata":             kv(func(s *rule.State, k string, v string) { s.Metadata(k, v) }),

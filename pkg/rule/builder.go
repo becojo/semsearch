@@ -279,7 +279,7 @@ func (s *State) FixRegex(fixRegex string) *State {
 }
 
 // Set the rule ID
-func (s *State) Id(id string) *State {
+func (s *State) ID(id string) *State {
 	r := s.headRule()
 	r.Id = id
 	return s
