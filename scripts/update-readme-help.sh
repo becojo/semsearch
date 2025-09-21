@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-alias semsearch=go run ./cmd/semsearch
+alias semsearch="go run ./cmd/semsearch"
 
 function matchInside() {
   echo '<!-- help start -->'

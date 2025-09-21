@@ -17,7 +17,7 @@ Pattern options:
 Pattern group options:
   -ps   --patterns [...]                    Start a pattern group where all patterns must match
   -pe   --pattern-either [...]              Start a pattern group where any pattern may match
-  -mp   --metavariable-pattern <name> [...] Start a metavariable pattern group
+  -mp   --metavariable-pattern <name> [...] Start a pattern group to match a metavariable
   -psk  --pattern-sinks [...]               Set the pattern sinks for the current rule
   -pso  --pattern-sources [...]             Set the pattern sources for the current rule
   ^     --pop                               Exit the current pattern group
