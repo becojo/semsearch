@@ -11,6 +11,12 @@ import (
 func main() {
 	args := os.Args[1:]
 
+	// Handle completion generation before normal CLI parsing
+	if len(args) == 1 && args[0] == "--bash-completion" {
+		fmt.Print(cli.GetBashCompletion())
+		return
+	}
+
 	if showHelp(args) {
 		fmt.Println(cli.Help())
 		return
