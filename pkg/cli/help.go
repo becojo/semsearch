@@ -34,7 +34,7 @@ Rule options:
   --id  <id>                                Rule ID
   --metadata <key=value>                    Add metadata to the rule
   --severity <severity>                     Set the severity of the rule
-  --option <key=value>                      Set an option for the rule
+  --option <key=value>                      Set an option for the rule (such as: generic_ellipsis_max_span)
   --path-include <path>                     Limit the search to the specified path
   --path-exclude <path>                     Exclude the specified path from the search
   --rule                                    Start a new rule

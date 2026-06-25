@@ -36,7 +36,7 @@ Rule options:
   --id  <id>                                Rule ID
   --metadata <key=value>                    Add metadata to the rule
   --severity <severity>                     Set the severity of the rule
-  --option <key=value>                      Set an option for the rule
+  --option <key=value>                      Set an option for the rule (such as: generic_ellipsis_max_span)
   --path-include <path>                     Limit the search to the specified path
   --path-exclude <path>                     Exclude the specified path from the search
   --rule                                    Start a new rule
@@ -55,43 +55,41 @@ Shell completion:
 
 ## Examples
 
+Listing official GitHub Actions used in this repository:
 
-### Search functions related to `*State`
-``` sh
-semsearch -l go -mr 'F=(Build|Args)' -fm F -pe -p 'func ($S *State) $F(...) {...}'  -p 'func $F(...) *State {...}'
+```sh
+semsearch -l yaml -p 'uses: "$USES"' -mr 'USES=actions' --path-include .github/workflows
 ```
 
-``` sh
-    cmd/semsearch.go
-    ❯❱ id
-          135┆ func (s *State) Args() []string {
-             ┆----------------------------------------
-          166┆ func (s *State) Build(args []string) {
+```
+    .github/workflows/ci.yml
+    ❯❱ rule-1
+           20┆ - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
+            ⋮┆----------------------------------------
+           23┆ - uses: actions/setup-go@924ae3a1cded613372ab5595356fb5720e22ba16 # v6
 ```
 
-### Output the Semgrep rule instead of running it
-
-``` sh
-semsearch -l go -mr 'F=(Build|Args)' -fm F -pe -p 'func ($S *State) $F(...) {...}'  -p 'func $F(...) *State {...}' --export
+Output the YAML rule used above instead of running it:
+```sh
+semsearch -l yaml -p 'uses: "$USES"' -mr 'USES=actions' --export
 ```
 
-``` yaml
+```yaml
 rules:
 - id: rule-1
   severity: WARNING
-  message: rule-1
+  message: ""
   languages:
-  - go
+  - yaml
+  paths:
+    include:
+    - .github/workflows
   patterns:
+  - pattern: 'uses: "$USES"'
   - metavariable-regex:
-      metavariable: $F
-      regex: (Build|Args)
-  - focus-metavariable: $F
-  - pattern-either:
-    - pattern: func ($S *State) $F(...) {...}
-    - pattern: func $F(...) *State {...}
+      metavariable: $USES
+      regex: actions
 ```
-
 
 ## Installation
 
