@@ -86,6 +86,10 @@ func (r *Runner) Args() []string {
 		args = append(args, "--autofix")
 	}
 
+	if r.state.taintIntrafile {
+		args = append(args, "--taint-intrafile")
+	}
+
 	if r.state.verbose {
 		args = append(args, "--verbose")
 	} else {

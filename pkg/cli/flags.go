@@ -47,6 +47,7 @@ var flags0 = map[string]func(*rule.State){
 	"pop":             func(s *rule.State) { s.Pop() },
 	"rule":            func(s *rule.State) { s.Rule() },
 	"semgrep":         func(s *rule.State) { s.Command("semgrep") },
+	"taint-intrafile": func(s *rule.State) { s.TaintIntrafile() },
 	"verbose":         func(s *rule.State) { s.Verbose() },
 	// keep-sorted end
 }

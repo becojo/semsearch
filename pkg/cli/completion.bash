@@ -36,7 +36,7 @@ _semsearch_completion() {
     prev="${COMP_WORDS[COMP_CWORD-1]}"
 
     # Flags that don't take arguments
-    local flags0="--autofix --debug --export --pattern-either --pattern-sinks --pattern-sources --patterns --pop --rule --semgrep --verbose"
+    local flags0="--autofix --debug --export --pattern-either --pattern-sinks --pattern-sources --patterns --pop --rule --semgrep --taint-intrafile --verbose"
 
     # Flags that take arguments
     local flags1="--config --eval --fix --fix-regex --focus-metavariable --format --id --language --message --metadata --metavariable-pattern --metavariable-regex --option --path --path-exclude --path-include --pattern --pattern-inside --pattern-not --pattern-not-inside --pattern-not-regex --pattern-regex --severity"

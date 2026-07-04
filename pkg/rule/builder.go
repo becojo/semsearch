@@ -43,6 +43,8 @@ type State struct {
 	command string
 	// opengrep verbose mode
 	verbose bool
+	// taint intrafile analysis
+	taintIntrafile bool
 }
 
 func Builder() *State {
@@ -351,6 +353,12 @@ func (s *State) PathExclude(path string) *State {
 // Enable Opengrep verbose mode.
 func (s *State) Verbose() *State {
 	s.verbose = true
+	return s
+}
+
+// Enable taint intrafile analysis.
+func (s *State) TaintIntrafile() *State {
+	s.taintIntrafile = true
 	return s
 }
 
