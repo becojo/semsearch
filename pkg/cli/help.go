@@ -45,6 +45,7 @@ Run options:
   --debug                                   Output semsearch debug information
   --verbose                                 Enable Opengrep verbose mode
   --export                                  Output the rule instead of running Opengrep
+  --taint-intrafile                         Enable Opengrep intrafile taint analysis
 
 Shell completion:
   --bash-completion                         Output bash completion script
