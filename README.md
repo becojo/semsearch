@@ -48,6 +48,8 @@ Run options:
   --verbose                                 Enable Opengrep verbose mode
   --export                                  Output the rule instead of running Opengrep
   --taint-intrafile                         Enable Opengrep intrafile taint analysis
+  --taint-interfile                         Enable Opengrep interfile taint analysis
+  --args --flag,--flag2                     Extra arguments to pass to Opengrep
 
 Shell completion:
   --bash-completion                         Output bash completion script
