@@ -45,6 +45,8 @@ type State struct {
 	verbose bool
 	// taint intrafile analysis
 	taintIntrafile bool
+	// extra arguments to pass to opengrep
+	extraArgs []string
 }
 
 func Builder() *State {
@@ -359,6 +361,17 @@ func (s *State) Verbose() *State {
 // Enable taint intrafile analysis.
 func (s *State) TaintIntrafile() *State {
 	s.taintIntrafile = true
+	return s
+}
+
+// Enable taint interfile analysis.
+func (s *State) TaintInterfile() *State {
+	s.ExtraArgs("--taint-interfile")
+	return s
+}
+
+func (s *State) ExtraArgs(args ...string) *State {
+	s.extraArgs = append(s.extraArgs, args...)
 	return s
 }
 
