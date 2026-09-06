@@ -47,6 +47,7 @@ var flags0 = map[string]func(*rule.State){
 	"pop":             func(s *rule.State) { s.Pop() },
 	"rule":            func(s *rule.State) { s.Rule() },
 	"semgrep":         func(s *rule.State) { s.Command("semgrep") },
+	"taint-interfile": func(s *rule.State) { s.TaintInterfile() },
 	"taint-intrafile": func(s *rule.State) { s.TaintIntrafile() },
 	"verbose":         func(s *rule.State) { s.Verbose() },
 	// keep-sorted end
@@ -55,6 +56,7 @@ var flags0 = map[string]func(*rule.State){
 // Flags expecting a value
 var flags1 = map[string]func(*rule.State, string){
 	// keep-sorted start block=yes
+	"args":                 func(s *rule.State, v string) { s.ExtraArgs(strings.Split(v, ",")...) },
 	"config":               func(s *rule.State, v string) { s.Config(v) },
 	"eval":                 func(s *rule.State, v string) { s.Eval(v) },
 	"fix":                  func(s *rule.State, v string) { s.Fix(v) },
@@ -78,7 +80,6 @@ var flags1 = map[string]func(*rule.State, string){
 	"pattern-not-regex":    func(s *rule.State, v string) { s.PatternNotRegex(v) },
 	"pattern-regex":        func(s *rule.State, v string) { s.PatternRegex(v) },
 	"severity":             func(s *rule.State, v string) { s.Severity(v) },
-
 	// keep-sorted end
 }
 

@@ -96,6 +96,7 @@ func (r *Runner) Args() []string {
 		args = append(args, "--quiet")
 	}
 
+	args = append(args, r.state.extraArgs...)
 	args = append(args, r.paths...)
 	args = append(args, r.state.paths...)
 
